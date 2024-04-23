@@ -10,7 +10,7 @@ endif()
 include(GNUInstallDirs)
 
 # ÃÌº”±‡“Î—°œÓ
-option(BUILD_TESTS "Build test programs" OFF)
+option(BUILD_TESTS "Build test programs" ON)
 option(USE_AVX "Use AVX instructions for performance optimization" OFF)
 option(USE_SSE "Use SSE instructions for performance optimization" OFF)
 
