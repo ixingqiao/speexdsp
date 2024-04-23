@@ -16,9 +16,17 @@ option(USE_SSE "Use SSE instructions for performance optimization" OFF)
 
 # 检查并启用AVX和SSE指令集支持
 if(USE_AVX)
-    add_compile_options(-mavx)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(-mavx)
+    elseif(MSVC)
+        add_compile_options(/arch:AVX)
+    endif()
 elseif(USE_SSE)
-    add_compile_options(-msse)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(-msse)
+    elseif(MSVC)
+        add_compile_options(/arch:SSE2)
+    endif()
 endif()
 
 # 设置编译器选项
@@ -48,9 +56,11 @@ set(USE_SMALLFT 1)
 # 配置文件，用于生成speexdsp_config_types.h和config.h
 if(HAVE_SYS_TYPES_H)
     set(INCLUDE_STDINT "#include <sys/types.h>")
-elseif(HAVE_STDINT_H)
+endif()
+if(HAVE_STDINT_H)
     set(INCLUDE_STDINT "#include <stdint.h>")
-elseif(HAVE_STDDEF_H)
+endif()
+if(HAVE_STDDEF_H)
     set(INCLUDE_STDINT "#include <inttypes.h>")
 endif()
 
@@ -67,7 +77,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # 添加库
-add_library(libspeexdsp STATIC ${SPEEXDSP_SOURCE}/resample.c
+add_library(speexdsp STATIC ${SPEEXDSP_SOURCE}/resample.c
         ${SPEEXDSP_SOURCE}/buffer.c
         ${SPEEXDSP_SOURCE}/fftwrap.c
         ${SPEEXDSP_SOURCE}/filterbank.c
@@ -79,11 +89,17 @@ add_library(libspeexdsp STATIC ${SPEEXDSP_SOURCE}/resample.c
         ${SPEEXDSP_SOURCE}/scal.c
         ${SPEEXDSP_SOURCE}/smallft.c)
 
+# 针对不同平台选择链接的数学库
+if(UNIX)
+    find_library(M_LIBRARY m)
+    target_link_libraries(speexdsp PRIVATE ${M_LIBRARY})
+endif()
+
 # 设置库的头文件路径
-target_include_directories(libspeexdsp PUBLIC ${SPEEXDSP_FOLDER}/include PRIVATE ${SPEEXDSP_FOLDER} ${SPEEXDSP_SOURCE} ${SPEEXDSP_FOLDER}/include ${SPEEXDSP_FOLDER}/include/speex)
+target_include_directories(speexdsp PUBLIC ${SPEEXDSP_FOLDER}/include PRIVATE ${SPEEXDSP_FOLDER} ${SPEEXDSP_SOURCE} ${SPEEXDSP_FOLDER}/include ${SPEEXDSP_FOLDER}/include/speex)
 
 # 设置编译选项
-target_compile_options(libspeexdsp PRIVATE "-DHAVE_CONFIG_H")
+target_compile_options(speexdsp PRIVATE "-DHAVE_CONFIG_H")
 
 # 添加测试程序
 if(BUILD_TESTS)
@@ -93,12 +109,12 @@ if(BUILD_TESTS)
         get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
         # 添加测试程序的构建规则
         add_executable(${TEST_NAME} ${TEST_SOURCE})
-        target_link_libraries(${TEST_NAME} libspeexdsp)
+        target_link_libraries(${TEST_NAME} speexdsp)
     endforeach()
 endif()
 
 # 安装规则
-install(TARGETS libspeexdsp
+install(TARGETS speexdsp
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
