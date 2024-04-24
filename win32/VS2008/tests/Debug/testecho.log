@@ -1,0 +1,10 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Analysis.props(24,5): warning MSB4211: 正在首次将属性“MsvcAnalysisPluginPath”设置为某个值，但已在“C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CodeAnalysis.Extensions.props (33,5)”处使用了该属性。
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: 中间目录(Debug\)包含从另一个项目(testresample.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
+cl : 命令行  warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  testecho.c
+F:\chicken\xingqiao\speexdsp\libspeexdsp\testecho.c(30,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\chicken\xingqiao\speexdsp\libspeexdsp\testecho.c(31,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\chicken\xingqiao\speexdsp\libspeexdsp\testecho.c(32,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1374,5): warning MSB8012: TargetPath(F:\chicken\xingqiao\speexdsp\win32\VS2008\tests\Debug\testecho.exe) 与 Linker 的 OutputFile 属性值(F:\chicken\xingqiao\speexdsp\bin\testecho.exe)不匹配。这可能导致项目生成不正确。若要更正此问题，请确保 $(OutDir)、$(TargetName) 和 $(TargetExt) 属性值与 %(Link.OutputFile) 中指定的值匹配。
+testecho.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/SAFESEH”规范)
+  testecho.vcxproj -> F:\chicken\xingqiao\speexdsp\win32\VS2008\tests\Debug\testecho.exe
